@@ -1,12 +1,10 @@
 import pytest
 
-from src.services.email import EmailService
-
 
 @pytest.mark.usefixtures("test_db")
 class TestEmailService:
     def test_create_email__(self):
-        email = EmailService.import_email(
+        email = EmailService.ingest(
             addressed_from="people.ops@continua.ai",
             addressed_to="candidate@continua.ai",
             cc_recipients=["hiring@continua.ai"],

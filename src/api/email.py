@@ -3,22 +3,19 @@ from fastapi.params import Query
 
 from src.api.schemas import Email, EmailResponse
 from src.api.utils import parse_psv_query_string
-from src.services.email import EmailService
+from src.services.indexer import Indexer
+from src.services.search_engine import SearchEngine
 
 router = APIRouter(prefix="/v1/emails")
+
+"""
+RENAME -- this is specifically an email service, calling it Email is redundant
+"""
 
 
 @router.post("/", response_model=Email)
 def import_email(email: Email):
-    # TODO: return serialized ORM email
-    processed_email = EmailService.import_email(
-        addressed_from=email.sender_email,
-        addressed_to=email.receiver_email,
-        cc_recipients=email.cc_receiver_emails,
-        subject=email.subject,
-        timestamp=email.timestamp,
-        message_content=email.message_content,
-    )
+    processed_email = Indexer.ingest(email)
     return email
 
 
@@ -36,7 +33,7 @@ def search(
     after: int | None = None,
     before: int | None = None,
 ):
-    emails = EmailService.search(
+    emails = SearchEngine.search(
         keywords=parse_psv_query_string(keywords),
         addressed_from=addressed_from,
         recipient=recipient,

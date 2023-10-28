@@ -1,12 +1,12 @@
 import pytest
 
-from src.repository.email import EmailRepository
+from src.repository.email import EmailSQLiteRepository
 
 
 @pytest.mark.usefixtures("test_db")
 class TestEmailRepository:
     def test_create(self):
-        x = EmailRepository.create(
+        x = EmailSQLiteRepository.save(
             addressed_from="people.ops@continua.ai",
             addressed_to="candidate@continua.ai",
             subject="Welcome to Continua",
@@ -18,7 +18,7 @@ class TestEmailRepository:
 
     def test_create_carbon_copies(self, an_email):
         email = an_email()
-        copies = EmailRepository.create_carbon_copies(
+        copies = EmailSQLiteRepository.create_carbon_copies(
             original=email, recipients=["xyz@mail.com"]
         )
         assert True is True
@@ -26,4 +26,4 @@ class TestEmailRepository:
     def test_search(self, an_email):
         email = an_email()
         keywords = ["Continua", "Day"]
-        assert EmailRepository.query(keywords=keywords) == [email]
+        assert EmailSQLiteRepository.query(keywords=keywords) == [email]

@@ -4,12 +4,13 @@ from peewee import fn
 
 from src.db import db
 from src.models.email import Email
+from src.services.schemas import EmailArgs
 
 
-class EmailRepository:
+class EmailSQLiteRepository:
     # Rename to EmailPeeWeeRepo?
     @staticmethod
-    def create(
+    def save(
         addressed_from,
         addressed_to,
         cc_recipients,
@@ -29,39 +30,17 @@ class EmailRepository:
             searchable_text=searchable_text,
         )
 
-    def create_with_carbon_copies(
-        self,
-        addressed_from,
-        addressed_to,
-        cc_recipients,
-        subject,
-        timestamp,
-        message_content,
-        searchable_text,
-    ):
+    def create_with_carbon_copies(self, email_args: EmailArgs):
         with db.atomic():
-            self.create(
-                addressed_from,
-                addressed_to,
-                cc_recipients,
-                subject,
-                timestamp,
-                message_content,
-                searchable_text,
-            )
-            carbon_copies = [
-                {
-                    "addressed_from": addressed_from,
-                    "addressed_to": addressed_to,
-                    "cc_recipients": ", ".join(cc_recipients),
-                    "actual_recipient": cc_recipient,
-                    "subject": subject,
-                    "timestamp": timestamp,
-                    "message_content": message_content,
-                    "searchable_text": searchable_text,
-                }
-                for cc_recipient in cc_recipients
-            ]
+            args_dict = email_args.model_dump()
+            self.save(**args_dict)
+
+            carbon_copies = []
+            for cc_recipient in email_args.cc_recipients:
+                cc_dict = args_dict.copy()
+                cc_dict["actual_recipient"] = cc_recipient
+                carbon_copies.append(cc_dict)
+
             Email.insert_many(carbon_copies).execute()
         return
 

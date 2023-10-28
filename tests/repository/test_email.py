@@ -7,8 +7,8 @@ from src.repository.email import EmailRepository
 class TestEmailRepository:
     def test_create(self):
         x = EmailRepository.create(
-            sender="people.ops@continua.ai",
-            recipient="candidate@continua.ai",
+            addressed_from="people.ops@continua.ai",
+            addressed_to="candidate@continua.ai",
             subject="Welcome to Continua",
             timestamp=1690569041,
             message_content="Welcome! On your first day…",

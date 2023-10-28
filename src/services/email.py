@@ -7,8 +7,8 @@ from src.services.utils import TextSearchOptimizer
 class EmailService:
     @staticmethod
     def import_email(
-        sender,
-        recipient,
+        addressed_from,
+        addressed_to,
         cc_recipients,
         subject,
         timestamp,
@@ -21,8 +21,8 @@ class EmailService:
             searchable_text = search_optimizer(searchable_text).optimize()
 
         email = EmailRepository().create_with_carbon_copies(
-            sender=sender,
-            recipient=recipient,
+            addressed_from=addressed_from,
+            addressed_to=addressed_to,
             cc_recipients=cc_recipients,
             subject=subject,
             timestamp=timestamp,
@@ -36,20 +36,25 @@ class EmailService:
     @staticmethod
     def search(
         keywords: List = None,
-        sender: str = None,
+        addressed_from: str = None,
         recipient: str = None,
         to_or_from_address: str = None,
         after: int = None,
         before: int = None,
     ):
         if not (
-            keywords or sender or recipient or to_or_from_address or after or before
+            keywords
+            or addressed_from
+            or recipient
+            or to_or_from_address
+            or after
+            or before
         ):
-            return  # What?
+            return []  # What?
         return EmailRepository.query(
             keywords=keywords,
-            sender=sender,
-            recipient=recipient,
+            addressed_from=addressed_from,
+            actual_recipient=recipient,
             to_or_from_address=to_or_from_address,
             after=after,
             before=before,

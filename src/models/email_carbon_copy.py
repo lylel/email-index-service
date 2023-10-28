@@ -1,4 +1,4 @@
-from peewee import Model, CharField, ManyToManyField
+from peewee import Model, ForeignKeyField, CharField
 
 from src.db import db
 from src.models.email import Email
@@ -6,8 +6,10 @@ from src.models.email import Email
 
 class EmailCarbonCopy(Model):
     # TODO: ADD INDICES
-    email = ManyToManyField(Email, backref="carbon_copies")
-    receiver = CharField()
+    email = ForeignKeyField(Email)
+    recipient = CharField()
 
     class Meta:
         database = db
+
+    # Unique constraint between email + recipient

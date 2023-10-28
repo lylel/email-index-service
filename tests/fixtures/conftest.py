@@ -13,3 +13,26 @@ def test_db():
     yield
     db.drop_tables([Email, EmailCarbonCopy])
     db.close()
+
+
+@pytest.fixture(scope="function")
+def an_email():
+    def _an_email(
+        sender="people.ops@continua.ai",
+        recipient="candidate@continua.ai",
+        subject="Welcome to Continua",
+        timestamp=1690569041,
+        message_content="Welcome! On your first day…",
+        searchable_text="Welcome to Continua Welcome On your first day",
+    ):
+        email = Email.create(
+            sender=sender,
+            recipient=recipient,
+            subject=subject,
+            timestamp=timestamp,
+            message_content=message_content,
+            searchable_text=searchable_text,
+        )
+        return email
+
+    return _an_email

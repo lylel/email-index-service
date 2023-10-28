@@ -1,6 +1,5 @@
 from typing import List
 
-from src.api.schemas import Email
 from src.repository.email import EmailRepository
 from src.services.utils import TextSearchOptimizer
 
@@ -10,22 +9,29 @@ class EmailService:
     def import_email(
         sender,
         recipient,
+        cc_recipients,
         subject,
         timestamp,
         message_content,
         search_optimizer=TextSearchOptimizer,
     ):
+        # This needs to be abstracted
+        searchable_text = subject + " " + message_content
         if search_optimizer:
-            message_content = search_optimizer(message_content).optimize()
-        # Convert ORM to Pydantic
-        # from_orm https://docs.pydantic.dev/latest/concepts/models/
-        return EmailRepository.add(
+            searchable_text = search_optimizer(searchable_text).optimize()
+
+        email = EmailRepository().create_with_carbon_copies(
             sender=sender,
             recipient=recipient,
+            cc_recipients=cc_recipients,
             subject=subject,
             timestamp=timestamp,
             message_content=message_content,
+            searchable_text=searchable_text,
         )
+        # Convert ORM to Pydantic
+        # from_orm https://docs.pydantic.dev/latest/concepts/models/
+        return email
 
     @staticmethod
     def search(
@@ -40,7 +46,7 @@ class EmailService:
             keywords or sender or recipient or to_or_from_address or after or before
         ):
             return  # What?
-        return EmailRepository.search(
+        return EmailRepository.query(
             keywords=keywords,
             sender=sender,
             recipient=recipient,

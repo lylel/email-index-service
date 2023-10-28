@@ -14,6 +14,7 @@ def import_email(email: Email):
     processed_email = EmailService.import_email(
         sender=email.sender_email,
         recipient=email.receiver_email,
+        cc_recipients=email.cc_receiver_emails,
         subject=email.subject,
         timestamp=email.timestamp,
         message_content=email.message_content,
@@ -43,17 +44,3 @@ def search(
         after=after,
         before=before,
     )
-
-
-#
-# #
-# def get_all_by_sender():
-#     pass
-#
-#
-# def get_all_by_receiver():
-#     pass
-#
-#
-# def get_all_between_time():
-#     pass

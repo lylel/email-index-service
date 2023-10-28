@@ -10,12 +10,7 @@ class Email(Model):
     subject = CharField()
     timestamp = BigIntegerField()
     message_content = CharField()
+    searchable_text = CharField()
 
     class Meta:
         database = db
-
-
-# class CarbonCopy(Email):
-#
-#     class Meta:
-#         database = db

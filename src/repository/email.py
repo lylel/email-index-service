@@ -57,6 +57,7 @@ class EmailRepository:
         q = Email.select()
 
         if keywords:
+            # Find carbon copies
             conditions = [
                 fn.Lower(Email.searchable_text.contains(word.lower()))
                 for word in keywords
@@ -69,6 +70,7 @@ class EmailRepository:
                 (Email.sender == to_or_from_address)
                 | (Email.recipient == to_or_from_address)
             )
+            q = q.where(EmailCarbonCopy.recipient == to_or_from_address)
         else:
             if sender:
                 q = q.where(Email.sender == sender)

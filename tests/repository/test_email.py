@@ -1,7 +1,6 @@
 import pytest
 
 from src.repository.email import EmailRepository
-from tests.fixtures.conftest import test_db, an_email
 
 
 @pytest.mark.usefixtures("test_db")

@@ -5,7 +5,6 @@ from src.models.email import Email
 
 
 class EmailCarbonCopy(Model):
-    # TODO: ADD INDICES
     email = ForeignKeyField(Email)
     recipient = CharField()
 

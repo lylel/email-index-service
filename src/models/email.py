@@ -4,7 +4,6 @@ from src.db import db
 
 
 class Email(Model):
-    # TODO: ADD INDICES
     sender = CharField()
     recipient = CharField()
     subject = CharField()

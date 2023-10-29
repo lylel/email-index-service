@@ -4,55 +4,40 @@ from peewee import fn
 
 from src.db import db
 from src.models.email import Email
+from src.models.email_carbon_copy import EmailCarbonCopy
 from src.services.schemas import EmailArgs
 
 
-class SQLiteRepository:
+class Repository:
     @staticmethod
-    def add(
-        addressed_from,
-        addressed_to,
-        cc_recipients,
-        subject,
-        timestamp,
-        message_content,
-        searchable_text,
-    ):
+    def add(email_args: EmailArgs):
         # Decide between single object parameter and large list of args
-        return Email.create(
-            addressed_from=addressed_from,
-            addressed_to=addressed_to,
-            cc_recipients=", ".join(cc_recipients),
-            actual_recipient=addressed_to,
-            subject=subject,
-            timestamp=timestamp,
-            message_content=message_content,
-            searchable_text=searchable_text,
-        )
+        return Email.create(**email_args.model_dump())
 
     def create_with_carbon_copies(self, email_args: EmailArgs):
         with db.atomic():
-            args_dict = email_args.model_dump()
-            self.add(**args_dict)
+            new_email = self.add(email_args)
 
-            carbon_copies = []
-            for cc_recipient in email_args.cc_recipients:
-                cc_dict = args_dict.copy()
-                cc_dict["actual_recipient"] = cc_recipient
-                carbon_copies.append(cc_dict)
-            Email.insert_many(carbon_copies).execute()
+            with db.atomic():
+                carbon_copy_data = [
+                    {"email": new_email, "recipient": recipient}
+                    for recipient in email_args.cc_recipients
+                ]
+                EmailCarbonCopy.insert_many(carbon_copy_data).execute()
         return
 
     @staticmethod
+    # Rename to repository convention, get? Find synonym for multi get
     def query(
         keywords=None,
-        addressed_from=None,
-        actual_recipient=None,
+        sender=None,
+        recipient=None,
         to_or_from_address=None,
         after=None,
         before=None,
     ):
-        q = Email.select()
+        print(333333333)
+        q = Email.select().join(EmailCarbonCopy)
 
         if keywords:
             conditions = [
@@ -64,21 +49,27 @@ class SQLiteRepository:
 
         if to_or_from_address:
             q = q.where(
-                (Email.addressed_from == to_or_from_address)
+                (Email.sender == to_or_from_address)
                 | (Email.recipient == to_or_from_address)
+                | (EmailCarbonCopy.recipient == to_or_from_address)
             )
         else:
-            if addressed_from:
-                q = q.where(Email.addressed_from == addressed_from)
-            if actual_recipient:
-                q = q.where(Email.recipient == actual_recipient)
+            if sender:
+                q = q.where(Email.sender == sender)
+            if recipient:
+                q = q.where(
+                    (Email.recipient == recipient)
+                    | (EmailCarbonCopy.recipient == recipient)
+                )
 
         if after:
             q = q.where(Email.timestamp > after)
         if before:
             q = q.where(Email.timestamp < before)
 
-        return [email for email in q]
+        results = [email for email in q]
+        print(results)
+        return results
 
     def query_constructor(self):
         pass

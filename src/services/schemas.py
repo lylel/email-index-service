@@ -4,10 +4,10 @@ from pydantic import BaseModel, field_serializer
 
 
 class EmailArgs(BaseModel):
-    addressed_from: str
-    addressed_to: str
+    sender: str
+    recipient: str
     cc_recipients: List[str]
-    actual_recipient: str
+    # actual_recipient: str
     subject: str
     timestamp: int
     message_content: str

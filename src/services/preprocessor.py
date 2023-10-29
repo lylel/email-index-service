@@ -33,10 +33,10 @@ class PreProcessor:
 
     def map(self) -> EmailArgs:
         return EmailArgs(
-            addressed_from=self.email.sender_email,
-            addressed_to=self.email.receiver_email,
+            sender=self.email.sender_email,
+            recipient=self.email.receiver_email,
             cc_recipients=self.email.cc_receiver_emails,
-            actual_recipient=self.email.receiver_email,
+            # actual_recipient=self.email.receiver_email,
             subject=self.email.subject,
             timestamp=self.email.timestamp,
             message_content=self.email.message_content,

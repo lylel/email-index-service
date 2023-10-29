@@ -1,17 +1,11 @@
-from src.api.schemas import Email
-from src.repository.peewee_sqlite import SQLiteRepository
+from src.repository.peewee_sqlite import Repository
 from src.services.preprocessor import PreProcessor
 
 
 class Indexer:
-    def __init__(self, email: Email, preprocessor=None, repository=None):
-        self._email = email
+    def __init__(self, preprocessor=None, repository=None):
         self._preprocessor = preprocessor
         self._repository = repository
-
-    @property
-    def email(self):
-        return self._email
 
     @property
     def preprocessor(self):
@@ -19,8 +13,8 @@ class Indexer:
 
     @property
     def repository(self):
-        return self._repository or SQLiteRepository
+        return self._repository or Repository
 
-    def ingest(self):
-        email_args = self.preprocessor(email=self.email).prepare()
+    def ingest(self, email):
+        email_args = self.preprocessor(email=email).prepare()
         return self.repository().create_with_carbon_copies(email_args)

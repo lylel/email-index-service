@@ -1,12 +1,12 @@
 import pytest
 
-from src.repository.peewee_sqlite import SQLiteRepository
+from src.repository.peewee_sqlite import Repository
 
 
 @pytest.mark.usefixtures("test_db")
 class TestEmailRepository:
     def test_create(self):
-        x = SQLiteRepository.add(
+        x = Repository.add(
             addressed_from="people.ops@continua.ai",
             addressed_to="candidate@continua.ai",
             subject="Welcome to Continua",
@@ -18,7 +18,7 @@ class TestEmailRepository:
 
     def test_create_carbon_copies(self, an_email):
         email = an_email()
-        copies = SQLiteRepository.create_carbon_copies(
+        copies = Repository.create_carbon_copies(
             original=email, recipients=["xyz@mail.com"]
         )
         assert True is True
@@ -26,4 +26,4 @@ class TestEmailRepository:
     def test_search(self, an_email):
         email = an_email()
         keywords = ["Continua", "Day"]
-        assert SQLiteRepository.query(keywords=keywords) == [email]
+        assert Repository.query(keywords=keywords) == [email]

@@ -1,6 +1,6 @@
 from typing import List
 
-from src.repository.peewee_sqlite import SQLiteRepository
+from src.repository.peewee_sqlite import Repository
 
 
 class SearchEngine:
@@ -16,6 +16,7 @@ class SearchEngine:
         after: int = None,
         before: int = None,
     ):
+        print(222222222)
         if not (
             keywords
             or addressed_from
@@ -25,10 +26,10 @@ class SearchEngine:
             or before
         ):
             return []  # What?
-        return SQLiteRepository.query(
+        return Repository.query(
             keywords=keywords,
-            addressed_from=addressed_from,
-            actual_recipient=recipient,
+            sender=addressed_from,
+            recipient=recipient,
             to_or_from_address=to_or_from_address,
             after=after,
             before=before,

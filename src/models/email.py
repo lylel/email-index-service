@@ -1,4 +1,4 @@
-from peewee import Model, CharField, BigIntegerField
+from peewee import Model, CharField, BigIntegerField, ForeignKeyField
 
 from src.db import db
 
@@ -15,3 +15,15 @@ class Email(Model):
 
     class Meta:
         database = db
+
+
+
+class Email(Model):
+    sender = CharField()
+    recipient = CharField()
+    message_content = CharField()
+
+
+class EmailCarbonCopy(Model):
+    email_id = ForeignKeyField(Email, backref='carbon_copies')
+    cc_recipient = CharField()

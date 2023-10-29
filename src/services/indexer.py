@@ -1,5 +1,5 @@
 from src.api.schemas import Email
-from src.repository.email import EmailSQLiteRepository
+from src.repository.peewee_sqlite import SQLiteRepository
 from src.services.preprocessor import PreProcessor
 
 
@@ -19,7 +19,7 @@ class Indexer:
 
     @property
     def repository(self):
-        return self._repository or EmailSQLiteRepository
+        return self._repository or SQLiteRepository
 
     def ingest(self):
         email_args = self.preprocessor(email=self.email).prepare()

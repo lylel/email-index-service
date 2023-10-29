@@ -1,9 +1,12 @@
 from typing import List
 
-from src.repository.email import EmailSQLiteRepository
+from src.repository.peewee_sqlite import SQLiteRepository
 
 
 class SearchEngine:
+    def __init__(self, repository=None):
+        self._repository = repository
+
     @staticmethod
     def search(
         keywords: List = None,
@@ -22,7 +25,7 @@ class SearchEngine:
             or before
         ):
             return []  # What?
-        return EmailSQLiteRepository.query(
+        return SQLiteRepository.query(
             keywords=keywords,
             addressed_from=addressed_from,
             actual_recipient=recipient,

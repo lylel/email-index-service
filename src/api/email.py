@@ -23,6 +23,7 @@ def import_email(email: Email):
 # Validate parameters
 @router.get("/")
 def search(
+    # Can this be objectified into a Pydantic schema
     keywords: str
     | None = Query(
         ..., title="Search Key Words", description="List of words separated by '+'"

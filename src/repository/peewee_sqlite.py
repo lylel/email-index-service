@@ -7,10 +7,9 @@ from src.models.email import Email
 from src.services.schemas import EmailArgs
 
 
-class EmailSQLiteRepository:
-    # Rename to EmailPeeWeeRepo?
+class SQLiteRepository:
     @staticmethod
-    def save(
+    def add(
         addressed_from,
         addressed_to,
         cc_recipients,
@@ -19,6 +18,7 @@ class EmailSQLiteRepository:
         message_content,
         searchable_text,
     ):
+        # Decide between single object parameter and large list of args
         return Email.create(
             addressed_from=addressed_from,
             addressed_to=addressed_to,
@@ -33,14 +33,13 @@ class EmailSQLiteRepository:
     def create_with_carbon_copies(self, email_args: EmailArgs):
         with db.atomic():
             args_dict = email_args.model_dump()
-            self.save(**args_dict)
+            self.add(**args_dict)
 
             carbon_copies = []
             for cc_recipient in email_args.cc_recipients:
                 cc_dict = args_dict.copy()
                 cc_dict["actual_recipient"] = cc_recipient
                 carbon_copies.append(cc_dict)
-
             Email.insert_many(carbon_copies).execute()
         return
 
@@ -80,3 +79,6 @@ class EmailSQLiteRepository:
             q = q.where(Email.timestamp < before)
 
         return [email for email in q]
+
+    def query_constructor(self):
+        pass

@@ -13,7 +13,7 @@ from src.services.search_engine import SearchEngine
 router = APIRouter(prefix="/v1/emails")
 
 
-@router.post("/", response_model=EmailResponse)
+@router.post("/", status_code=201, response_model=EmailResponse)
 def import_email(email: EmailRequest):
     return serialize_email(Indexer().ingest(email=email))
 

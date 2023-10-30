@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+
 from src.db import db
 from src.models.email import Email
 from src.models.email_carbon_copy import EmailCarbonCopy
@@ -9,8 +11,16 @@ from src.repository.query_filters import (
     is_before,
     recipient_is,
 )
-from src.repository.schemas import SearchRequest
 from src.services.schemas import EmailArgs
+
+
+class SearchRequest(BaseModel):
+    keywords: list[str] | None = None
+    sender: str | None = None
+    recipient: str | None = None
+    sender_or_recipient: str | None = None
+    after: int | None = None
+    before: int | None = None
 
 
 class Repository:

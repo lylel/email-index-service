@@ -17,12 +17,12 @@ class PreProcessor:
 
     def generate_searchable_text(self, email: EmailRequest):
         searchable_text = ""
+
         if email.subject:
             searchable_text += email.subject
+
         if email.message_content:
-            if searchable_text:
-                searchable_text += " "
-            searchable_text += email.message_content
+            searchable_text += " " + email.message_content
 
         return self.search_optimizer(text=searchable_text).optimize()
 

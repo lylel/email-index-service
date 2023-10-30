@@ -1,5 +1,3 @@
-from typing import List
-
 from src.api.schemas import EmailRequest
 from src.services.schemas import EmailArgs
 from src.services.utils import TextSearchOptimizer
@@ -27,7 +25,8 @@ class PreProcessor:
     def searchable_text(self, value):
         self._searchable_text = value
 
-    def prepare(self):
+    def prepare(self) -> EmailArgs:
+        # TODO: Should init or prepare take email
         self.searchable_text = self.search_optimizer(self.searchable_text).optimize()
         return self.map()
 

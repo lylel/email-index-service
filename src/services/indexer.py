@@ -1,3 +1,5 @@
+from src.api.schemas import EmailRequest
+from src.models.email import Email
 from src.repository.peewee_sqlite import Repository
 from src.services.preprocessor import PreProcessor
 
@@ -15,6 +17,6 @@ class Indexer:
     def repository(self):
         return self._repository or Repository
 
-    def ingest(self, email):
+    def ingest(self, email: EmailRequest) -> Email:
         email_args = self.preprocessor(email=email).prepare()
         return self.repository().add_email_with_carbon_copies(email_args)

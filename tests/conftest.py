@@ -2,23 +2,24 @@ import pytest
 
 from src.db import db
 from src.models.email import Email
+from src.models.email_carbon_copy import EmailCarbonCopy
 
 
 @pytest.fixture(scope="function")
 def test_db():
     db.init(":memory:")
     db.connect()
-    db.create_tables([Email])
+    db.create_tables([Email, EmailCarbonCopy])
     yield
-    db.drop_tables([Email])
+    db.drop_tables([Email, EmailCarbonCopy])
     db.close()
 
 
 @pytest.fixture(scope="function")
 def an_email():
     def _an_email(
-        addressed_from="people.ops@continua.ai",
-        addressed_to="candidate@continua.ai",
+        sender="people.ops@continua.ai",
+        recipient="candidate@continua.ai",
         cc_recipients="hiring@continua.ai",
         subject="Welcome to Continua",
         timestamp=1690569041,
@@ -26,8 +27,8 @@ def an_email():
         searchable_text="Welcome to Continua Welcome On your first day",
     ):
         email = Email.create(
-            addressed_from=addressed_from,
-            addressed_to=addressed_to,
+            sender=sender,
+            recipient=recipient,
             cc_recipients=cc_recipients,
             subject=subject,
             timestamp=timestamp,

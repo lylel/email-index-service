@@ -19,12 +19,11 @@ class TextSearchOptimizer:
     def sanitizer(self):
         return self._sanitizer or ProfanityDetector
 
-    def optimize(self):
-        # Is this doing too much, does this need to be decoupled
+    def optimize(self) -> str:
         self._remove_punctuation()
         self.text = self.text.strip()
         self._replace_whitespace()
-        self.text = self.sanitizer().sanitize(self.text)
+        self.text = self.sanitizer().clean(self.text)
         return self.text
 
     def _replace_whitespace(self):

@@ -13,11 +13,10 @@ from src.services.schemas import EmailArgs
 
 
 class Repository:
-    def add_email_with_carbon_copies(self, email_args: EmailArgs):
+    def add_email_with_carbon_copies(self, email_args: EmailArgs) -> Email:
         with db.atomic():
             new_email = self._add_email(email_args)
             self._add_carbon_copies(new_email, email_args)
-
         return new_email
 
     def find_all(
@@ -40,7 +39,7 @@ class Repository:
 
         return [email for email in q]
 
-    def _add_email(self, email_args: EmailArgs):
+    def _add_email(self, email_args: EmailArgs) -> Email:
         return Email.create(**email_args.model_dump())
 
     def _add_carbon_copies(self, new_email, email_args):

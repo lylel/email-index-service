@@ -14,8 +14,8 @@ class SearchEngine:
 
     def search(
         self,
-        keywords: List = None,
-        addressed_from: str = None,
+        keywords: List[str] = None,
+        sender: str = None,
         recipient: str = None,
         sender_or_recipient: str = None,
         after: int = None,
@@ -23,7 +23,7 @@ class SearchEngine:
     ) -> list[Email]:
         return self.repository().find_all(
             keywords=keywords,
-            sender=addressed_from,
+            sender=sender,
             recipient=recipient,
             sender_or_recipient=sender_or_recipient,
             after=after,

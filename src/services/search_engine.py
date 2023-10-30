@@ -12,25 +12,24 @@ class SearchEngine:
         keywords: List = None,
         addressed_from: str = None,
         recipient: str = None,
-        to_or_from_address: str = None,
+        sender_or_recipient: str = None,
         after: int = None,
         before: int = None,
     ):
-        print(222222222)
         if not (
             keywords
             or addressed_from
             or recipient
-            or to_or_from_address
+            or sender_or_recipient
             or after
             or before
         ):
             return []  # What?
-        return Repository.query(
+        return Repository.find_all(
             keywords=keywords,
             sender=addressed_from,
             recipient=recipient,
-            to_or_from_address=to_or_from_address,
+            sender_or_recipient=sender_or_recipient,
             after=after,
             before=before,
         )

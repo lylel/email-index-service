@@ -26,4 +26,4 @@ class TestEmailRepository:
     def test_search(self, an_email):
         email = an_email()
         keywords = ["Continua", "Day"]
-        assert Repository.query(keywords=keywords) == [email]
+        assert Repository.find_all(keywords=keywords) == [email]

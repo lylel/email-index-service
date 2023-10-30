@@ -17,4 +17,4 @@ class Indexer:
 
     def ingest(self, email):
         email_args = self.preprocessor(email=email).prepare()
-        return self.repository().create_with_carbon_copies(email_args)
+        return self.repository().add_email_with_carbon_copies(email_args)

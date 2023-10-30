@@ -18,9 +18,9 @@ class TestEmailService:
 
         EmailService.search(
             keywords=["Day", "Welcome", "On"],
-            addressed_from="people.ops@continua.ai",
+            sender="people.ops@continua.ai",
             recipient="candidate@continua.ai",
-            to_or_from_address=None,
+            sender_or_recipient=None,
             after=0,
             before=None,
         )

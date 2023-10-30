@@ -28,18 +28,17 @@ def search(
     | None = Query(
         None, title="Search Key Words", description="List of words separated by '+'"
     ),
-    addressed_from: str | None = None,
+    sender: str | None = None,
     recipient: str | None = None,
-    to_or_from: str | None = None,
+    sender_or_recipient: str | None = None,
     after: int | None = None,
     before: int | None = None,
 ):
-    print(11111111)
     emails = SearchEngine.search(
         keywords=parse_psv_query_string(keywords) if keywords else None,
-        addressed_from=addressed_from,
+        addressed_from=sender,
         recipient=recipient,
-        to_or_from_address=to_or_from,
+        sender_or_recipient=sender_or_recipient,
         after=after,
         before=before,
     )

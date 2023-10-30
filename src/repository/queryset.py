@@ -1,7 +1,3 @@
-from functools import reduce
-
-from peewee import fn
-
 from src.models.email import Email
 from src.models.email_carbon_copy import EmailCarbonCopy
 

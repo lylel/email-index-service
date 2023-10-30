@@ -6,9 +6,10 @@ from src.services.utils import TextSearchOptimizer
 
 
 class SearchEngine:
-    def __init__(self, repository=None, search_optimizer=None):
+    def __init__(self, repository=None, search_optimizer=None, sanitizer=None):
         self._repository = repository
         self._search_optimizer = search_optimizer
+        self._sanitizer = sanitizer
 
     @property
     def repository(self):
@@ -18,9 +19,13 @@ class SearchEngine:
     def search_optimizer(self):
         return self._search_optimizer or TextSearchOptimizer
 
+    @property
+    def sanitizer(self):
+        return self._sanitizer or ProfanityRemover
+
     def search(self, search_request: SearchRequest) -> list[Email]:
         if search_request.keywords:
             search_request.keywords = self.search_optimizer(
-                text=search_request.keywords, sanitizer=ProfanityRemover
+                text=search_request.keywords, sanitizer=self.sanitizer
             ).optimize()
         return self.repository().find_all(search_request)

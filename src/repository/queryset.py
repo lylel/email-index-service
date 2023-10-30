@@ -8,11 +8,7 @@ from src.models.email_carbon_copy import EmailCarbonCopy
 
 def contains(keywords, q):
     if keywords:
-        conditions = [
-            fn.Lower(Email.searchable_text.contains(word.lower())) for word in keywords
-        ]
-        combined_condition = reduce(lambda x, y: x & y, conditions)
-        return q.where(combined_condition)
+        return q.where(Email.searchable_text.contains(keywords))
     return q
 
 

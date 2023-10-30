@@ -12,6 +12,15 @@ class EmailRequest(BaseModel):
     message_content: str | None
 
 
+class SearchRequest(BaseModel):
+    keywords: str | None = None
+    sender: str | None = None
+    recipient: str | None = None
+    sender_or_recipient: str | None = None
+    after: int | None = None
+    before: int | None = None
+
+
 class EmailResponse(BaseModel):
     sender_email: str = Field(alias="sender")
     receiver_email: str = Field(alias="recipient")
@@ -29,7 +38,7 @@ class EmailResponse(BaseModel):
         return self.cc_receiver_emails.split(", ")
 
 
-def serialize_email(email: Email) -> EmailResponse:
+def serialize_email(email: Email) -> dict:
     return EmailResponse.model_validate(email).model_dump()
 
 

@@ -9,6 +9,7 @@ from src.repository.queryset import (
     is_before,
     recipient_is,
 )
+from src.repository.schemas import SearchRequest
 from src.services.schemas import EmailArgs
 
 
@@ -19,22 +20,14 @@ class Repository:
             self._add_carbon_copies(new_email, email_args)
         return new_email
 
-    def find_all(
-        self,
-        keywords=None,
-        sender=None,
-        recipient=None,
-        sender_or_recipient=None,
-        after=None,
-        before=None,
-    ) -> list[Email]:
-        q = Email.select().join(EmailCarbonCopy)
-        q = contains(keywords, q)
-        q = sender_is(sender, q)
-        q = recipient_is(recipient, q)
-        q = sender_or_recipient_is(sender_or_recipient, q)
-        q = is_after(after, q)
-        q = is_before(before, q)
+    def find_all(self, search_request: SearchRequest) -> list[Email]:
+        q = Email.select().left_outer_join(EmailCarbonCopy)
+        q = contains(search_request.keywords, q)
+        q = sender_is(search_request.sender, q)
+        q = recipient_is(search_request.recipient, q)
+        q = sender_or_recipient_is(search_request.sender_or_recipient, q)
+        q = is_after(search_request.after, q)
+        q = is_before(search_request.before, q)
         q = q.distinct()
 
         return [email for email in q]

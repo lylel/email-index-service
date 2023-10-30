@@ -1,8 +1,11 @@
-from fastapi import APIRouter
-from fastapi.params import Query
+from fastapi import APIRouter, Depends
 
-from src.api.schemas import EmailRequest, serialize_email, serialize_emails
-from src.api.utils import parse_psv_query_string
+from src.api.schemas import (
+    EmailRequest,
+    serialize_email,
+    serialize_emails,
+)
+from src.api.schemas import SearchRequest
 from src.services.indexer import Indexer
 from src.services.search_engine import SearchEngine
 
@@ -15,25 +18,5 @@ def import_email(email: EmailRequest):
 
 
 @router.get("/")
-def search(
-    # TODO: Can this be objectified into a Pydantic schema
-    keywords: str
-    | None = Query(
-        None, title="Search Key Words", description="List of words separated by '+'"
-    ),
-    sender: str | None = None,
-    recipient: str | None = None,
-    sender_or_recipient: str | None = None,
-    after: int | None = None,
-    before: int | None = None,
-):
-    return serialize_emails(
-        SearchEngine().search(
-            keywords=parse_psv_query_string(keywords) if keywords else None,
-            sender=sender,
-            recipient=recipient,
-            sender_or_recipient=sender_or_recipient,
-            after=after,
-            before=before,
-        )
-    )
+def search(search_request: SearchRequest = Depends(SearchRequest)):
+    return serialize_emails(SearchEngine().search(search_request))

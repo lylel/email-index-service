@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_serializer, Field, field_validator
+from pydantic import BaseModel, Field
 
 from src.models.email import Email
 
@@ -6,7 +6,7 @@ from src.models.email import Email
 class EmailRequest(BaseModel):
     sender_email: str
     receiver_email: str
-    cc_receiver_emails: list[str | None]
+    cc_receiver_emails: list[str] | None
     subject: str | None = None
     timestamp: int
     message_content: str | None = None

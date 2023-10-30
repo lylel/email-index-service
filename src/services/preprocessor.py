@@ -4,44 +4,35 @@ from src.services.text_search_optimizer import TextSearchOptimizer
 
 
 class PreProcessor:
-    def __init__(self, email: EmailRequest, search_optimizer=None):
-        self._email = email
+    def __init__(self, search_optimizer=None):
         self._search_optimizer = search_optimizer
-        self._searchable_text = None
-
-    @property
-    def email(self):
-        return self._email
 
     @property
     def search_optimizer(self):
         return self._search_optimizer or TextSearchOptimizer
 
-    @property
-    def searchable_text(self):
-        return self.email.subject + " " + self.email.message_content
+    def prepare(self, email: EmailRequest) -> EmailArgs:
+        searchable_text = self.generate_searchable_text(email)
+        return self.map(email, searchable_text)
 
-    @searchable_text.setter
-    def searchable_text(self, value):
-        self._searchable_text = value
+    def generate_searchable_text(self, email: EmailRequest):
+        searchable_text = ""
+        if email.subject:
+            searchable_text += email.subject
+        if email.message_content:
+            if searchable_text:
+                searchable_text += " "
+            searchable_text += email.message_content
 
-    def prepare(self) -> EmailArgs:
-        # TODO: Should init or prepare take email
-        self.searchable_text = self.search_optimizer(self.searchable_text).optimize()
-        return self.map()
+        return self.search_optimizer(text=searchable_text).optimize()
 
-    def map(self) -> EmailArgs:
+    def map(self, email, searchable_text) -> EmailArgs:
         return EmailArgs(
-            sender=self.email.sender_email,
-            recipient=self.email.receiver_email,
-            cc_recipients=self.email.cc_receiver_emails,
-            subject=self.email.subject,
-            timestamp=self.email.timestamp,
-            message_content=self.email.message_content,
-            searchable_text=self.searchable_text,
+            sender=email.sender_email,
+            recipient=email.receiver_email,
+            cc_recipients=email.cc_receiver_emails,
+            subject=email.subject,
+            timestamp=email.timestamp,
+            message_content=email.message_content,
+            searchable_text=searchable_text,
         )
-
-
-class SearchableText:
-    def __init__(self, blob):
-        self._blob = blob

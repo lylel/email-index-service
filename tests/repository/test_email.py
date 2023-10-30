@@ -1,7 +1,7 @@
 import pytest
 from fastapi import FastAPI
 
-from src.api import emails
+from src.api import v1_emails
 from src.repository.peewee_sqlite import Repository
 from src.services.schemas import EmailArgs
 

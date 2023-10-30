@@ -1,12 +1,12 @@
 from typing import List
 
-from src.api.schemas import Email
+from src.api.schemas import EmailRequest
 from src.services.schemas import EmailArgs
 from src.services.utils import TextSearchOptimizer
 
 
 class PreProcessor:
-    def __init__(self, email: Email, search_optimizer=None):
+    def __init__(self, email: EmailRequest, search_optimizer=None):
         self._email = email
         self._search_optimizer = search_optimizer
         self._searchable_text = None
@@ -36,7 +36,6 @@ class PreProcessor:
             sender=self.email.sender_email,
             recipient=self.email.receiver_email,
             cc_recipients=self.email.cc_receiver_emails,
-            # actual_recipient=self.email.receiver_email,
             subject=self.email.subject,
             timestamp=self.email.timestamp,
             message_content=self.email.message_content,

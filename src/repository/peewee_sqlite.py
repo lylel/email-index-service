@@ -1,13 +1,13 @@
 from src.db import db
 from src.models.email import Email
 from src.models.email_carbon_copy import EmailCarbonCopy
-from src.repository.peewee_sqlite_queryset import (
-    has_keywords,
-    recipient_or_sender_is,
-    is_sender,
+from src.repository.queryset import (
+    contains,
+    sender_or_recipient_is,
+    sender_is,
     is_after,
     is_before,
-    is_recipient,
+    recipient_is,
 )
 from src.services.schemas import EmailArgs
 
@@ -20,24 +20,25 @@ class Repository:
 
         return new_email
 
-    @staticmethod
     def find_all(
+        self,
         keywords=None,
         sender=None,
         recipient=None,
         sender_or_recipient=None,
         after=None,
         before=None,
-    ):
+    ) -> list[Email]:
         q = Email.select().join(EmailCarbonCopy)
-        q = has_keywords(keywords, q)
-        q = is_sender(sender, q)
-        q = is_recipient(recipient, q)
-        q = recipient_or_sender_is(sender_or_recipient, q)
+        q = contains(keywords, q)
+        q = sender_is(sender, q)
+        q = recipient_is(recipient, q)
+        q = sender_or_recipient_is(sender_or_recipient, q)
         q = is_after(after, q)
         q = is_before(before, q)
+        q = q.distinct()
 
-        return q.execute()
+        return [email for email in q]
 
     def _add_email(self, email_args: EmailArgs):
         return Email.create(**email_args.model_dump())

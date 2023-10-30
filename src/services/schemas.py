@@ -7,7 +7,6 @@ class EmailArgs(BaseModel):
     sender: str
     recipient: str
     cc_recipients: List[str]
-    # actual_recipient: str
     subject: str
     timestamp: int
     message_content: str

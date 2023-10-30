@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
 
-class Email(BaseModel):
+class EmailRequest(BaseModel):
     sender_email: str
     receiver_email: str
     cc_receiver_emails: list[str | None]
@@ -11,18 +11,16 @@ class Email(BaseModel):
 
 
 class EmailResponse(BaseModel):
-    sender_email: "addressed_from"
-    receiver_email: "addressed_to"
-    cc_receiver_emails: str
-    actual_recipient: str
-    subject: str | None = None
+    sender: str
+    recipient: str
+    cc_recipients: str
+    subject: str
     timestamp: int
-    message_content: str | None
+    message_content: str
 
     class Config:
         from_attributes = True
-        #
 
-    # @property
-    # def cc_receiver_emails(self):
-    #     return
+    @field_serializer("cc_recipients")
+    def serialize_cc_recipients(self, cc_recipients: str):
+        return self.cc_recipients.split(", ")

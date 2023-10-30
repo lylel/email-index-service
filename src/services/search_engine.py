@@ -1,8 +1,8 @@
 from src.models.email import Email
-from src.profanity_remover.remover import ProfanityRemover
+from src.profanity_remover_v1.remover import ProfanityRemover
 from src.repository.peewee_sqlite import Repository
 from src.repository.schemas import SearchRequest
-from src.services.utils import TextSearchOptimizer
+from src.services.text_search_optimizer import TextSearchOptimizer
 
 
 class SearchEngine:

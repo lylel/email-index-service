@@ -1,7 +1,7 @@
 from src.db import db
 from src.models.email import Email
 from src.models.email_carbon_copy import EmailCarbonCopy
-from src.repository.queryset import (
+from src.repository.query_filters import (
     contains,
     sender_or_recipient_is,
     sender_is,

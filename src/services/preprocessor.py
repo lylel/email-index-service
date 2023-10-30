@@ -1,6 +1,6 @@
 from src.api.schemas import EmailRequest
 from src.services.schemas import EmailArgs
-from src.services.utils import TextSearchOptimizer
+from src.services.text_search_optimizer import TextSearchOptimizer
 
 
 class PreProcessor:
@@ -40,3 +40,8 @@ class PreProcessor:
             message_content=self.email.message_content,
             searchable_text=self.searchable_text,
         )
+
+
+class SearchableText:
+    def __init__(self, blob):
+        self._blob = blob

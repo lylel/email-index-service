@@ -1,4 +1,4 @@
-from src.profanity_detector.profanity import PROFANITY_SET
+from src.profanity_detector_v1.profanity import PROFANITY_SET
 
 
 class ProfanityRemover:

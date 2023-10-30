@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_serializer, Field
+from pydantic import BaseModel, field_serializer, Field, field_validator
 
 from src.models.email import Email
 
@@ -9,7 +9,7 @@ class EmailRequest(BaseModel):
     cc_receiver_emails: list[str | None]
     subject: str | None = None
     timestamp: int
-    message_content: str | None
+    message_content: str | None = None
 
 
 class SearchRequest(BaseModel):
@@ -24,23 +24,20 @@ class SearchRequest(BaseModel):
 class EmailResponse(BaseModel):
     sender_email: str = Field(alias="sender")
     receiver_email: str = Field(alias="recipient")
-    cc_receiver_emails: str = Field(alias="cc_recipients")
-    subject: str
+    cc_receiver_emails: list[str] | None = Field(alias="cc_recipients")
+    subject: str | None
     timestamp: int
-    message_content: str
+    message_content: str | None
 
     class Config:
         from_attributes = True
         populate_by_name = True
 
-    @field_serializer("cc_receiver_emails")
-    def serialize_cc_receiver_emails(self, cc_receiver_emails: str):
-        return self.cc_receiver_emails.split(", ")
-
 
 def serialize_email(email: Email) -> dict:
+    email.cc_recipients = email.cc_recipients.split(", ")
     return EmailResponse.model_validate(email).model_dump()
 
 
-def serialize_emails(emails: list[Email]) -> list[EmailResponse]:
+def serialize_emails(emails: list[Email]) -> list[dict]:
     return [serialize_email(email) for email in emails]

@@ -1,4 +1,4 @@
-from src.profanity_detector.detector import ProfanityDetector
+from src.profanity_detector_v1.detector import ProfanityDetector
 from src.services.constants import PUNCTUATION_CHARS
 
 

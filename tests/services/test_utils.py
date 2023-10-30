@@ -1,4 +1,4 @@
-from src.services.utils import TextSearchOptimizer
+from src.services.text_search_optimizer import TextSearchOptimizer
 
 
 class TestTextSearchOptimizer:

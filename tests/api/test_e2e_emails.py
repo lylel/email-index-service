@@ -1,18 +1,20 @@
-import requests
-from fastapi import FastAPI
+import pytest
+from starlette.testclient import TestClient
 
-from src.api.emails import search
-from src.db import db
+from main import app
 from src.models.email import Email
-
-# Temp solution until I figure out how to use TestClient with a non-SQLAlchemy ORM
-APP_URL = "http://127.0.0.1:8000/v1/emails/"
+from tests.conftest import test_db
 
 
+client = TestClient(app)
+
+
+@pytest.mark.usefixtures("test_db")
 class TestEmailsAPI:
     def test_import_email(self):
-        response = requests.post(
-            APP_URL,
+        initial_email_count = Email.select().count()
+        response = client.post(
+            "/v1/emails",
             json={
                 "sender_email": "e2e.test@continua.ai",
                 "receiver_email": "candidate@continua.ai",
@@ -23,3 +25,4 @@ class TestEmailsAPI:
             },
         )
         assert response.status_code == 200
+        assert Email.select().count() == initial_email_count + 1

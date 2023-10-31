@@ -26,7 +26,7 @@ def an_email():
         subject="Welcome to Continua",
         timestamp=1690569041,
         message_content="Welcome! On your first day…",
-        searchable_text="Welcome to Continua Welcome On your first day",
+        searchable_text="Welcome [profanity] Continua Welcome On your first day",
     ):
         email = Email.create(
             sender=sender,

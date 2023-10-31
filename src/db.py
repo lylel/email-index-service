@@ -1,8 +1,9 @@
+import os
 from contextvars import ContextVar
 
 import peewee
 
-DATABASE_NAME = "email-index.db"
+DATABASE_NAME = os.path.join("..", "email-index.db")
 db_state_default = {"closed": None, "conn": None, "ctx": None, "transactions": None}
 db_state = ContextVar("db_state", default=db_state_default.copy())
 

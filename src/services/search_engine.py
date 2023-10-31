@@ -1,6 +1,6 @@
 from src.models.email import Email
 from src.profanity_remover_v1.remover import ProfanityRemover
-from src.repository.peewee_sqlite import Repository, SearchRequest
+from src.repositories.peewee_sqlite import Repository, SearchRequest
 from src.services.text_search_optimizer import TextSearchOptimizer
 
 

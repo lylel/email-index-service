@@ -1,6 +1,6 @@
 from src.api.schemas import EmailRequest
 from src.models.email import Email
-from src.repository.peewee_sqlite import Repository
+from src.repositories.peewee_sqlite import Repository
 from src.services.preprocessor import PreProcessor
 
 

@@ -1,10 +1,8 @@
 import pytest
 from starlette.testclient import TestClient
 
-from main import app
+from src.main import app
 from src.models.email import Email
-from tests.conftest import test_db
-
 
 client = TestClient(app)
 

@@ -1,3 +1,7 @@
+.git
+__pycache__
+tests/
+
 *.db
 
 # Byte-compiled / optimized / DLL files
@@ -84,14 +88,6 @@ ipython_config.py
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
 
 # mypy
 .mypy_cache/
@@ -116,8 +112,6 @@ coverage.xml
 test.db
 log.txt
 Pipfile.lock
-env3.*
-env
 docs_build
 site_build
 venv

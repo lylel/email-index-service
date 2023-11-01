@@ -12,10 +12,17 @@ This Email Index Service is a REST HTTP web service modularized into several lay
 The code can be considered fairly self-describing due to the limited complexity of the project, so the amount of comments provided is also limited. I understand that comment usage will vary based on the culture of a team/project and can be adaptable depending on what the needs are.
 
 Languages: Python 3.11.0
+
 Dependency Management: Poetry
-Testing: pytest
+
 Storage: SQLite3
-Containerzation: Docker
+
+Frameworks: FastAPI, PeeWee ORM
+
+Testing: pytest
+
+Containerization: Docker
+
 
 To run as a container:
 ```sh

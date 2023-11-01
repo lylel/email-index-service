@@ -11,23 +11,24 @@ def contains(keywords, q):
 def sender_or_recipient_is(address, q):
     if address:
         return q.where(
-            (Email.sender == address)
-            | (Email.recipient == address)
-            | (EmailCarbonCopy.recipient == address)
+            (Email.sender_email == address)
+            | (Email.receiver_email == address)
+            | (EmailCarbonCopy.receiver_email == address)
         )
     return q
 
 
 def sender_is(address, q):
     if address:
-        return q.where(Email.sender == address)
+        return q.where(Email.sender_email == address)
     return q
 
 
 def recipient_is(address, q):
     if address:
         return q.where(
-            (Email.recipient == address) | (EmailCarbonCopy.recipient == address)
+            (Email.receiver_email == address)
+            | (EmailCarbonCopy.receiver_email == address)
         )
     return q
 

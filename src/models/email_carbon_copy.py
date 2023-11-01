@@ -6,7 +6,7 @@ from src.models.email import Email
 
 class EmailCarbonCopy(Model):
     email = ForeignKeyField(Email, backref="carbon_copies")
-    recipient = CharField()
+    receiver_email = CharField()
 
     class Meta:
         database = db

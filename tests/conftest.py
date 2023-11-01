@@ -20,18 +20,18 @@ def test_db():
 @pytest.fixture(scope="function")
 def an_email():
     def _an_email(
-        sender="people.ops@continua.ai",
-        recipient="candidate@continua.ai",
-        cc_recipients="hiring@continua.ai",
-        subject="Welcome to Continua",
+        sender_email="people.ops@continua.ai",
+        receiver_email="candidate@continua.ai",
+        cc_receiver_emails="hiring@continua.ai",
+        subject="Hello!     World@@@@@@",
         timestamp=1690569041,
-        message_content="Welcome! On your first day…",
-        searchable_text="Welcome [profanity] Continua Welcome On your first day",
+        message_content="#(%*&(!&%#!Some |||| Random -----    Words",
+        searchable_text="Hello World Some Random Words",
     ):
         email = Email.create(
-            sender=sender,
-            recipient=recipient,
-            cc_recipients=cc_recipients,
+            sender_email=sender_email,
+            receiver_email=receiver_email,
+            cc_receiver_emails=cc_receiver_emails,
             subject=subject,
             timestamp=timestamp,
             message_content=message_content,

@@ -4,9 +4,9 @@ from src.db import db
 
 
 class Email(Model):
-    sender = CharField()
-    recipient = CharField()
-    cc_recipients = CharField()
+    sender_email = CharField()
+    receiver_email = CharField()
+    cc_receiver_emails = CharField()
     subject = CharField()
     timestamp = BigIntegerField()
     message_content = CharField()

@@ -28,9 +28,9 @@ class PreProcessor:
 
     def map(self, email, searchable_text) -> EmailArgs:
         return EmailArgs(
-            sender=email.sender_email,
-            recipient=email.receiver_email,
-            cc_recipients=email.cc_receiver_emails,
+            sender_email=email.sender_email,
+            receiver_email=email.receiver_email,
+            cc_receiver_emails=email.cc_receiver_emails,
             subject=email.subject,
             timestamp=email.timestamp,
             message_content=email.message_content,

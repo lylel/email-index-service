@@ -16,8 +16,8 @@ from src.services.schemas import EmailArgs
 
 class SearchRequest(BaseModel):
     keywords: list[str] | None = None
-    sender: str | None = None
-    recipient: str | None = None
+    sender_email: str | None = None
+    receiver_email: str | None = None
     sender_or_recipient: str | None = None
     after: int | None = None
     before: int | None = None
@@ -33,8 +33,8 @@ class Repository:
     def find_all(self, search_request: SearchRequest) -> list[Email]:
         q = Email.select().left_outer_join(EmailCarbonCopy)
         q = contains(search_request.keywords, q)
-        q = sender_is(search_request.sender, q)
-        q = recipient_is(search_request.recipient, q)
+        q = sender_is(search_request.sender_email, q)
+        q = recipient_is(search_request.receiver_email, q)
         q = sender_or_recipient_is(search_request.sender_or_recipient, q)
         q = is_after(search_request.after, q)
         q = is_before(search_request.before, q)
@@ -48,7 +48,7 @@ class Repository:
     def _add_carbon_copies(self, new_email, email_args):
         with db.atomic():
             carbon_copy_data = [
-                {"email": new_email, "recipient": recipient}
-                for recipient in email_args.cc_recipients
+                {"email": new_email, "receiver_email": recipient}
+                for recipient in email_args.cc_receiver_emails
             ]
             EmailCarbonCopy.insert_many(carbon_copy_data).execute()
